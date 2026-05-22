@@ -1,0 +1,456 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@200;300;400;500&display=swap');
+  #fs-root{background:#141418;min-height:100vh;color:#fff;font-family:'Noto Sans KR',sans-serif;position:relative;overflow-x:hidden}
+  *{box-sizing:border-box;margin:0;padding:0}
+  ::selection{background:rgba(196,177,240,0.35);color:#fff}
+  ::-webkit-scrollbar{width:3px}
+  ::-webkit-scrollbar-thumb{background:rgba(196,177,240,0.2);border-radius:2px}
+  .pf{font-family:'Playfair Display',serif}
+  .dm{font-family:'DM Sans',sans-serif}
+  .noto{font-family:'Noto Sans KR',sans-serif}
+  .nav-link{cursor:pointer;color:rgba(255,255,255,0.4);font-size:11px;letter-spacing:0.08em;font-weight:500;transition:color 0.3s;font-family:'DM Sans',sans-serif}
+  .nav-link:hover{color:rgba(196,177,240,0.9)}
+  .card{cursor:pointer;border-radius:6px;overflow:hidden;position:relative;transition:all 0.4s cubic-bezier(0.4,0,0.2,1)}
+  .card:hover{transform:translateY(-4px) scale(1.01);box-shadow:0 16px 48px rgba(196,177,240,0.08)}
+  .filter-btn{padding:6px 16px;border-radius:4px;font-size:10px;letter-spacing:0.12em;font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,0.06);background:transparent;color:rgba(255,255,255,0.3);transition:all 0.3s}
+  .filter-btn.active{border-color:rgba(196,177,240,0.35);background:rgba(196,177,240,0.1);color:rgba(196,177,240,0.9)}
+  .scene-card{cursor:pointer;border-radius:6px;overflow:hidden;position:relative;transition:all 0.4s cubic-bezier(0.4,0,0.2,1);aspect-ratio:3/4;background:linear-gradient(160deg,#1a1820 0%,#211e2e 100%);border:1px solid rgba(255,255,255,0.04)}
+  .scene-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(100,80,160,0.15);border-color:rgba(196,177,240,0.22)}
+  .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(10,10,14,0.97);backdrop-filter:blur(24px);display:flex;align-items:center;justify-content:center;padding:24px;animation:fadeInM 0.2s ease-out}
+  .modal-box{width:92vw;max-width:1100px;height:88vh;background:rgba(22,22,30,0.95);border-radius:12px;border:1px solid rgba(196,177,240,0.1);display:flex;flex-direction:column;overflow:hidden;animation:slideUpM 0.4s cubic-bezier(0.16,1,0.3,1)}
+  .modal-body{padding:32px 48px;overflow-y:auto;flex-grow:1}
+  .close-btn{background:none;border:1px solid rgba(255,255,255,0.08);cursor:pointer;color:rgba(255,255,255,0.3);width:40px;height:40px;border-radius:6px;font-size:20px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;margin-left:24px}
+  .close-btn:hover{border-color:rgba(196,177,240,0.3);color:rgba(196,177,240,0.8)}
+  .tag-badge{padding:4px 14px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:0.14em;font-family:'DM Sans',sans-serif}
+  .ai-badge{font-size:10px;font-weight:600;letter-spacing:0.1em;font-family:'DM Sans',sans-serif;padding:4px 12px;border-radius:3px;background:rgba(196,177,240,0.15);color:rgba(196,177,240,0.7);border:1px solid rgba(196,177,240,0.12)}
+  .proc-step{padding:24px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);transition:all 0.3s}
+  .proc-step:hover{border-color:rgba(196,177,240,0.12);background:rgba(196,177,240,0.03)}
+  @keyframes fadeInM{from{opacity:0}to{opacity:1}}
+  @keyframes slideUpM{from{opacity:0;transform:translateY(32px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+  @keyframes floatP{from{transform:translateY(0)}to{transform:translateY(-8px)}}
+  @keyframes revealC{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes drift{0%{opacity:0;transform:translateY(40px)}100%{opacity:1;transform:translateY(0)}}
+  @keyframes pulse{0%,100%{opacity:0.3}50%{opacity:0.7}}
+</style>
+
+<div id="fs-root">
+
+<!-- PARTICLES -->
+<div id="particles" style="position:fixed;inset:0;pointer-events:none;z-index:0"></div>
+
+<!-- AMBIENT GLOW -->
+<div style="position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 20% 80%,rgba(196,177,240,0.03) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 20%,rgba(196,177,240,0.02) 0%,transparent 50%)"></div>
+
+<!-- NAV -->
+<nav id="main-nav" style="position:fixed;top:0;left:0;right:0;z-index:50;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;transition:all 0.4s">
+  <div class="pf" style="font-size:18px;font-weight:300;letter-spacing:0.12em;color:rgba(255,255,255,0.7)">FROM.<span style="font-weight:500;font-style:italic;color:rgba(196,177,240,0.9)">S</span></div>
+  <div style="display:flex;gap:28px">
+    <span class="nav-link" onclick="scrollTo('work-section')">WORK</span>
+    <span class="nav-link" style="color:rgba(196,177,240,0.55)" onclick="scrollTo('night-section')">21년의 밤</span>
+    <span class="nav-link" onclick="scrollTo('proc-section')">PROCESS</span>
+    <span class="nav-link" onclick="scrollTo('contact-section')">CONTACT</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;z-index:1;text-align:center;padding:0 40px">
+  <div style="animation:drift 1s ease-out both">
+    <p class="dm" style="font-size:11px;letter-spacing:0.35em;color:rgba(196,177,240,0.5);font-weight:500;margin-bottom:28px">DESIGN PORTFOLIO</p>
+    <h1 class="pf" style="font-size:clamp(52px,9vw,110px);font-weight:300;letter-spacing:0.06em;line-height:0.95;margin-bottom:12px">
+      <span style="color:rgba(255,255,255,0.85)">FROM.</span><span style="font-style:italic;font-weight:400;color:rgba(196,177,240,0.9)">S</span>
+    </h1>
+    <p class="dm" style="font-size:12px;letter-spacing:0.18em;color:rgba(255,255,255,0.22);margin-bottom:56px">이슬비 — Creative Lead & Designer</p>
+    <div style="display:flex;gap:56px;justify-content:center">
+      <div><div class="pf" style="font-size:30px;font-weight:300;color:rgba(255,255,255,0.65)">10+</div><div class="dm" style="font-size:9px;letter-spacing:0.2em;color:rgba(196,177,240,0.35);margin-top:6px">YEARS</div></div>
+      <div><div class="pf" style="font-size:30px;font-weight:300;color:rgba(255,255,255,0.65)">1,228</div><div class="dm" style="font-size:9px;letter-spacing:0.2em;color:rgba(196,177,240,0.35);margin-top:6px">CREATIVES</div></div>
+      <div><div class="pf" style="font-size:30px;font-weight:300;color:rgba(255,255,255,0.65)">2×</div><div class="dm" style="font-size:9px;letter-spacing:0.2em;color:rgba(196,177,240,0.35);margin-top:6px">CTR LIFT</div></div>
+    </div>
+  </div>
+  <div style="position:absolute;bottom:40px;left:50%;transform:translateX(-50%);animation:pulse 3s ease-in-out infinite">
+    <div style="width:1px;height:36px;background:linear-gradient(to bottom,rgba(196,177,240,0.3),transparent)"></div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="work-section" style="position:relative;z-index:1;padding:48px 40px 80px;max-width:1200px;margin:0 auto">
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px;flex-wrap:wrap;gap:16px">
+    <div>
+      <p class="dm" style="font-size:10px;letter-spacing:0.3em;color:rgba(196,177,240,0.45);font-weight:600;margin-bottom:8px">SELECTED WORK</p>
+      <h2 class="pf" style="font-size:30px;font-weight:300;color:rgba(255,255,255,0.8);letter-spacing:0.04em">Projects</h2>
+    </div>
+    <div id="filters" style="display:flex;gap:6px"></div>
+  </div>
+  <div id="proj-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px"></div>
+</section>
+
+<!-- 21년의 밤 -->
+<section id="night-section" style="position:relative;z-index:1;padding:80px 40px 100px;overflow:hidden">
+  <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 100% 60% at 50% 0%,rgba(100,80,180,0.06) 0%,transparent 60%)"></div>
+  <div style="max-width:1200px;margin:0 auto;position:relative">
+    <div style="margin-bottom:56px">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
+        <p class="dm" style="font-size:10px;letter-spacing:0.3em;color:rgba(196,177,240,0.45);font-weight:600">AI FILM PROJECT</p>
+        <span class="dm" style="padding:3px 12px;border-radius:3px;font-size:9px;font-weight:700;letter-spacing:0.12em;background:rgba(196,177,240,0.12);color:rgba(196,177,240,0.6);border:1px solid rgba(196,177,240,0.18)">진행 중</span>
+      </div>
+      <h2 class="pf" style="font-size:clamp(36px,5vw,72px);font-weight:300;color:rgba(255,255,255,0.88);letter-spacing:0.04em;line-height:1.05;margin-bottom:16px;font-style:italic">21년의 밤</h2>
+      <p class="noto" style="font-size:15px;color:rgba(255,255,255,0.35);line-height:1.85;font-weight:300;max-width:600px">꿈일기를 원천으로 한 AI 단편 영상 프로젝트. 21년의 기억을 3막 14씬으로 재구성하고, 생성형 AI 워크플로우로 시각화하는 진행 중 케이스스터디.</p>
+      <div style="display:flex;gap:32px;margin-top:28px;flex-wrap:wrap">
+        <div><span class="pf" style="font-size:22px;font-weight:300;color:rgba(196,177,240,0.75)">3</span><div class="dm" style="font-size:9px;font-weight:600;letter-spacing:0.15em;color:rgba(255,255,255,0.18);margin-top:4px">ACTS</div></div>
+        <div><span class="pf" style="font-size:22px;font-weight:300;color:rgba(196,177,240,0.75)">14</span><div class="dm" style="font-size:9px;font-weight:600;letter-spacing:0.15em;color:rgba(255,255,255,0.18);margin-top:4px">SCENES</div></div>
+        <div><span class="pf" style="font-size:22px;font-weight:300;color:rgba(196,177,240,0.75)">6</span><div class="dm" style="font-size:9px;font-weight:600;letter-spacing:0.15em;color:rgba(255,255,255,0.18);margin-top:4px">AI TOOLS</div></div>
+        <div><span class="pf" style="font-size:22px;font-weight:300;color:rgba(196,177,240,0.75)">WIP</span><div class="dm" style="font-size:9px;font-weight:600;letter-spacing:0.15em;color:rgba(255,255,255,0.18);margin-top:4px">STATUS</div></div>
+      </div>
+    </div>
+
+    <!-- Workflow pipeline -->
+    <div style="margin-bottom:64px;padding:28px 32px;border-radius:8px;background:rgba(196,177,240,0.02);border:1px solid rgba(196,177,240,0.07)">
+      <p class="dm" style="font-size:9px;letter-spacing:0.22em;color:rgba(196,177,240,0.4);font-weight:600;margin-bottom:20px">AI WORKFLOW PIPELINE</p>
+      <div style="display:flex;align-items:center;flex-wrap:wrap;gap:0" id="wf-pipeline"></div>
+    </div>
+
+    <!-- Act 1 -->
+    <div style="margin-bottom:52px">
+      <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:24px">
+        <span class="pf" style="font-size:13px;font-weight:300;color:rgba(196,177,240,0.6);font-style:italic">Act 1</span>
+        <span class="pf" style="font-size:20px;font-weight:300;color:rgba(255,255,255,0.55);letter-spacing:0.03em">기억의 시작</span>
+        <div style="flex-grow:1;height:1px;background:rgba(255,255,255,0.04)"></div>
+        <span class="dm" style="font-size:10px;color:rgba(255,255,255,0.15)">5 scenes</span>
+      </div>
+      <div id="act1-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px"></div>
+    </div>
+    <!-- Act 2 -->
+    <div style="margin-bottom:52px">
+      <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:24px">
+        <span class="pf" style="font-size:13px;font-weight:300;color:rgba(180,160,240,0.55);font-style:italic">Act 2</span>
+        <span class="pf" style="font-size:20px;font-weight:300;color:rgba(255,255,255,0.55);letter-spacing:0.03em">균열과 침잠</span>
+        <div style="flex-grow:1;height:1px;background:rgba(255,255,255,0.04)"></div>
+        <span class="dm" style="font-size:10px;color:rgba(255,255,255,0.15)">5 scenes</span>
+      </div>
+      <div id="act2-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px"></div>
+    </div>
+    <!-- Act 3 -->
+    <div style="margin-bottom:52px">
+      <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:24px">
+        <span class="pf" style="font-size:13px;font-weight:300;color:rgba(160,140,230,0.45);font-style:italic">Act 3</span>
+        <span class="pf" style="font-size:20px;font-weight:300;color:rgba(255,255,255,0.55);letter-spacing:0.03em">귀환과 각성</span>
+        <div style="flex-grow:1;height:1px;background:rgba(255,255,255,0.04)"></div>
+        <span class="dm" style="font-size:10px;color:rgba(255,255,255,0.15)">4 scenes</span>
+      </div>
+      <div id="act3-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="proc-section" style="position:relative;z-index:1;padding:80px 40px;max-width:1200px;margin:0 auto">
+  <p class="dm" style="font-size:10px;letter-spacing:0.3em;color:rgba(196,177,240,0.45);font-weight:600;margin-bottom:8px">HOW I WORK</p>
+  <h2 class="pf" style="font-size:30px;font-weight:300;color:rgba(255,255,255,0.8);letter-spacing:0.04em;margin-bottom:44px">Process</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+    <div class="proc-step"><span class="pf" style="font-size:32px;font-weight:300;color:rgba(196,177,240,0.1);line-height:1">01</span><h3 class="pf" style="font-size:18px;font-weight:400;color:rgba(255,255,255,0.7);margin-top:12px;margin-bottom:8px;letter-spacing:0.02em">전략 수립</h3><p style="font-size:13px;color:rgba(255,255,255,0.3);line-height:1.7;font-weight:300">브랜드 분석과 KPI 기반의 크리에이티브 방향성 도출</p></div>
+    <div class="proc-step"><span class="pf" style="font-size:32px;font-weight:300;color:rgba(196,177,240,0.1);line-height:1">02</span><h3 class="pf" style="font-size:18px;font-weight:400;color:rgba(255,255,255,0.7);margin-top:12px;margin-bottom:8px;letter-spacing:0.02em">컨셉 기획</h3><p style="font-size:13px;color:rgba(255,255,255,0.3);line-height:1.7;font-weight:300">메시지 설계, 비주얼 컨셉, AI 활용 프로토타이핑</p></div>
+    <div class="proc-step"><span class="pf" style="font-size:32px;font-weight:300;color:rgba(196,177,240,0.1);line-height:1">03</span><h3 class="pf" style="font-size:18px;font-weight:400;color:rgba(255,255,255,0.7);margin-top:12px;margin-bottom:8px;letter-spacing:0.02em">제작 · 리딩</h3><p style="font-size:13px;color:rgba(255,255,255,0.3);line-height:1.7;font-weight:300">핸즈온 디자인 또는 팀 디렉팅과 품질 관리</p></div>
+    <div class="proc-step"><span class="pf" style="font-size:32px;font-weight:300;color:rgba(196,177,240,0.1);line-height:1">04</span><h3 class="pf" style="font-size:18px;font-weight:400;color:rgba(255,255,255,0.7);margin-top:12px;margin-bottom:8px;letter-spacing:0.02em">성과 최적화</h3><p style="font-size:13px;color:rgba(255,255,255,0.3);line-height:1.7;font-weight:300">데이터 기반 소재 개선, A/B 테스트, CTR 모니터링</p></div>
+  </div>
+  <div style="margin-top:28px;padding:28px 32px;border-radius:6px;background:linear-gradient(135deg,rgba(196,177,240,0.04) 0%,rgba(196,177,240,0.01) 100%);border:1px solid rgba(196,177,240,0.08)">
+    <p class="dm" style="font-size:10px;letter-spacing:0.2em;color:rgba(196,177,240,0.55);font-weight:600;margin-bottom:12px">AI-ENHANCED WORKFLOW</p>
+    <p style="font-size:14px;line-height:1.85;color:rgba(255,255,255,0.4);font-weight:300">생성형 AI를 크리에이티브 프로세스에 통합하여 리소스 효율화, 컨셉 프로토타이핑, 비주얼 실험을 수행합니다.</p>
+    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
+      <span class="dm" style="padding:5px 14px;font-size:10px;letter-spacing:0.08em;font-weight:500;border-radius:4px;border:1px solid rgba(196,177,240,0.12);color:rgba(196,177,240,0.5)">Midjourney</span>
+      <span class="dm" style="padding:5px 14px;font-size:10px;letter-spacing:0.08em;font-weight:500;border-radius:4px;border:1px solid rgba(196,177,240,0.12);color:rgba(196,177,240,0.5)">Nano Banana</span>
+      <span class="dm" style="padding:5px 14px;font-size:10px;letter-spacing:0.08em;font-weight:500;border-radius:4px;border:1px solid rgba(196,177,240,0.12);color:rgba(196,177,240,0.5)">Higgsfield</span>
+      <span class="dm" style="padding:5px 14px;font-size:10px;letter-spacing:0.08em;font-weight:500;border-radius:4px;border:1px solid rgba(196,177,240,0.12);color:rgba(196,177,240,0.5)">Kling</span>
+      <span class="dm" style="padding:5px 14px;font-size:10px;letter-spacing:0.08em;font-weight:500;border-radius:4px;border:1px solid rgba(196,177,240,0.12);color:rgba(196,177,240,0.5)">Topaz</span>
+      <span class="dm" style="padding:5px 14px;font-size:10px;letter-spacing:0.08em;font-weight:500;border-radius:4px;border:1px solid rgba(196,177,240,0.12);color:rgba(196,177,240,0.5)">Google AI Studio</span>
+      <span class="dm" style="padding:5px 14px;font-size:10px;letter-spacing:0.08em;font-weight:500;border-radius:4px;border:1px solid rgba(196,177,240,0.12);color:rgba(196,177,240,0.5)">Claude</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact-section" style="position:relative;z-index:1;padding:80px 40px 100px;text-align:center;max-width:1200px;margin:0 auto">
+  <p class="dm" style="font-size:10px;letter-spacing:0.3em;color:rgba(196,177,240,0.45);font-weight:600;margin-bottom:8px">GET IN TOUCH</p>
+  <h2 class="pf" style="font-size:30px;font-weight:300;color:rgba(255,255,255,0.8);margin-bottom:12px">Contact</h2>
+  <p style="font-size:13px;color:rgba(255,255,255,0.25);margin-bottom:32px;font-weight:300">새로운 기회에 대한 이야기를 나누고 싶습니다.</p>
+  <div style="display:flex;gap:12px;justify-content:center">
+    <a href="mailto:pilotfish89@gmail.com" style="padding:11px 32px;border-radius:4px;text-decoration:none;font-size:11px;letter-spacing:0.12em;font-family:'DM Sans',sans-serif;font-weight:600;border:1px solid rgba(196,177,240,0.35);color:rgba(196,177,240,0.85);background:transparent">EMAIL</a>
+    <a href="#" style="padding:11px 32px;border-radius:4px;text-decoration:none;font-size:11px;letter-spacing:0.12em;font-family:'DM Sans',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.35);background:transparent">LINKEDIN</a>
+  </div>
+</section>
+
+<footer style="position:relative;z-index:1;padding:20px 40px;text-align:center;border-top:1px solid rgba(255,255,255,0.03)">
+  <p class="dm" style="font-size:10px;letter-spacing:0.12em;color:rgba(255,255,255,0.12)">© 2026 FROM.S — Seulbi Lee</p>
+</footer>
+
+<!-- MODAL (faux viewport so it contributes layout height) -->
+<div id="modal-wrap" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(10,10,14,0.97);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:20px">
+  <div class="modal-box">
+    <div id="modal-hdr" style="padding:28px 48px 22px;border-bottom:1px solid rgba(255,255,255,0.04);display:flex;justify-content:space-between;align-items:flex-start;flex-shrink:0"></div>
+    <div id="modal-body" class="modal-body"></div>
+  </div>
+</div>
+
+<!-- SCENE MODAL -->
+<div id="scene-modal-wrap" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(8,8,12,0.97);backdrop-filter:blur(28px);align-items:center;justify-content:center;padding:20px">
+  <div style="width:92vw;max-width:860px;height:88vh;background:rgba(18,16,26,0.95);border-radius:12px;border:1px solid rgba(196,177,240,0.1);display:flex;flex-direction:column;overflow:hidden;animation:slideUpM 0.4s cubic-bezier(0.16,1,0.3,1)">
+    <div id="scene-hdr" style="padding:24px 40px 18px;border-bottom:1px solid rgba(255,255,255,0.04);display:flex;justify-content:space-between;align-items:center;flex-shrink:0"></div>
+    <div style="display:flex;flex-grow:1;overflow:hidden">
+      <div id="scene-img" style="width:55%;background:rgba(196,177,240,0.02);border-right:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;flex-shrink:0"></div>
+      <div id="scene-info" style="flex-grow:1;padding:32px 36px;overflow-y:auto"></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const PROJECTS=[
+  {id:"hyundai",brand:"현대카드",period:"2024",role:"lead",ai:true,tag:"프리미엄 금융 브랜드의 디지털 크리에이티브 총괄",stats:[{l:"연간 소재",v:"1,228"},{l:"CTR",v:"2×"},{l:"노출",v:"20억+"}],desc:"현대카드 전 카드 라인업의 디지털 광고 크리에이티브를 총괄 리딩. 브랜드 일관성을 유지하면서 카드별 차별화된 비주얼 전략을 수립하고, 하반기 CTR 2배 개선을 달성.",proc:"크리에이티브 방향성 수립 → 기획팀 커뮤니케이션 → 팀 내 업무 분배 → 시안 리뷰 → 성과 모니터링"},
+  {id:"coupang",brand:"쿠팡풀필먼트",period:"2024–25",role:"handson",ai:true,tag:"데일리 카카오 플친 소재 대량 제작",stats:[{l:"발송",v:"Daily"},{l:"총 소재",v:"6,900+"}],desc:"카카오 플러스친구 채널의 데일리 프로모션 소재를 직접 기획·제작·운영. 대량 제작 환경에서 일관된 퀄리티와 효율적 워크플로우 구축.",proc:"프로모션 캘린더 → 소재 기획 → 디자인 제작 → 검수 → 발송"},
+  {id:"spirit",brand:"스피릿테일즈",period:"2024",role:"lead",ai:true,tag:"게임 런칭 DA 캠페인 크리에이티브 리드",stats:[{l:"포맷",v:"DA/BSA/KV"}],desc:"스피릿테일즈 게임 런칭 및 시즌별 업데이트 캠페인의 크리에이티브 방향성 수립 및 팀 리딩.",proc:"IP 분석 → 타깃 설정 → 컨셉 수립 → 시안 리딩 → 매체 최적화"},
+  {id:"ali",brand:"알리익스프레스",period:"2024",role:"collab",ai:true,tag:"글로벌 이커머스 DA 캠페인",stats:[{l:"캠페인",v:"BSA/타임딜"}],desc:"알리익스프레스의 다양한 프로모션 DA 소재 기획 및 제작 협업.",proc:"글로벌 가이드 → 로컬라이제이션 → 소재 제작 → 매체 협업"},
+  {id:"jobkorea",brand:"잡코리아",period:"2024",role:"handson",ai:false,tag:"채용 플랫폼 디지털 크리에이티브",stats:[],desc:"잡코리아 신학기 캠페인, 이상형월드컵 등 프로모션 DA 소재 직접 제작.",proc:"브리프 분석 → 컨셉 도출 → 디자인 → 리뷰 → 최종 산출"},
+  {id:"daesang",brand:"대상웰라이프",period:"2024",role:"collab",ai:true,tag:"건강기능식품 디지털 마케팅",stats:[{l:"제품",v:"15종"}],desc:"뉴케어, 마이밀, 올프로틴 등 15개 제품 라인의 DA 소재 및 이벤트 페이지 제작.",proc:"USP 분석 → 메시지 설계 → 소재 제작 → A/B 테스트"},
+  {id:"woori",brand:"우리카드",period:"2025",role:"lead",ai:false,tag:"금융 브랜드 크리에이티브 운영",stats:[],desc:"우리카드 디지털 광고 크리에이티브 운영 및 리딩.",proc:"브리프 → 방향성 → 팀 배분 → 리뷰 → 산출"},
+  {id:"netmarble",brand:"넷마블",period:"2024",role:"lead",ai:true,tag:"게임 퍼포먼스 DA",stats:[],desc:"넷마블 게임 타이틀 퍼포먼스 마케팅 DA 크리에이티브 리딩.",proc:"타이틀 분석 → UA 전략 → 크리에이티브 리딩 → 최적화"},
+  {id:"linegames",brand:"라인게임즈",period:"2024",role:"lead",ai:false,tag:"게임 브랜드 DA 크리에이티브",stats:[],desc:"라인게임즈 게임 타이틀 디지털 광고 크리에이티브 리딩.",proc:"IP 분석 → 세그먼트 → 전략 → 제작 관리 → QC"},
+];
+const RM={handson:{l:"HANDS-ON",bg:"rgba(196,177,240,0.85)",fg:"#141418"},lead:{l:"LEAD",bg:"rgba(255,255,255,0.85)",fg:"#141418"},collab:{l:"COLLAB",bg:"rgba(196,177,240,0.4)",fg:"#e8e0ff"}};
+const SCENES=[
+  {id:1,act:1,scene:"Sc.01",title:"기억의 문",desc:"꿈속 첫 번째 복도. 어린 시절의 잔상들이 벽을 채운다."},
+  {id:2,act:1,scene:"Sc.02",title:"잠든 도시",desc:"새벽 3시, 아무도 없는 거리. 가로등 빛이 물웅덩이에 번진다."},
+  {id:3,act:1,scene:"Sc.03",title:"서랍 속",desc:"열리지 않는 서랍. 그 안에 무엇이 있는지 알면서도 열지 못한다."},
+  {id:4,act:1,scene:"Sc.04",title:"첫 번째 균열",desc:"천장에서 시작된 균열이 바닥까지 내려온다. 소리 없이."},
+  {id:5,act:1,scene:"Sc.05",title:"반복",desc:"같은 계단을 오르는 꿈. 몇 번째인지 세는 것을 멈췄다."},
+  {id:6,act:2,scene:"Sc.06",title:"마주침",desc:"거울 속에서 눈이 마주쳤다. 내가 먼저 눈을 피했다."},
+  {id:7,act:2,scene:"Sc.07",title:"수몰",desc:"물이 차오른다. 당황하지 않는 자신이 더 낯설다."},
+  {id:8,act:2,scene:"Sc.08",title:"목소리",desc:"이름을 부르는 목소리. 돌아보면 항상 아무도 없다."},
+  {id:9,act:2,scene:"Sc.09",title:"경계",desc:"꿈인지 현실인지 구분이 흐려지는 순간들."},
+  {id:10,act:2,scene:"Sc.10",title:"21년",desc:"21년이 하나의 프레임으로 압축된다. 무게가 느껴진다."},
+  {id:11,act:3,scene:"Sc.11",title:"해방",desc:"무거운 것을 내려놓는 꿈. 무엇인지는 깨어나면 잊힌다."},
+  {id:12,act:3,scene:"Sc.12",title:"새벽빛",desc:"창문으로 들어오는 빛. 먼지가 빛 속에서 춤춘다."},
+  {id:13,act:3,scene:"Sc.13",title:"귀환",desc:"어딘가로 돌아가는 꿈. 어디인지 알 것 같은 느낌."},
+  {id:14,act:3,scene:"Sc.14",title:"눈을 뜨다",desc:"꿈의 마지막 프레임. 이것이 끝인지 시작인지."},
+];
+const WF=[
+  {step:"01",tool:"시나리오",detail:"꿈일기 기반 스크립트"},
+  {step:"02",tool:"Midjourney",detail:"키 비주얼 생성"},
+  {step:"03",tool:"Nano Banana",detail:"보조 이미지 크로스체크"},
+  {step:"04",tool:"Higgsfield/Kling",detail:"스틸 → 모션 변환"},
+  {step:"05",tool:"Topaz",detail:"업스케일 · 노이즈 제거"},
+  {step:"06",tool:"Premiere",detail:"최종 편집 · 사운드"},
+];
+const HYUNDAI={
+  strategy:"프리미엄 상품 런칭부터 대중 시장 캠페인까지 전략 범위를 넓히면서도, 모든 캠페인에서 현대카드 특유의 디자인 우수성을 유지하는 것이 핵심 과제였다. 브랜드 일관성과 타깃 다변화 사이의 긴장을 크리에이티브 전략으로 풀어낸 프로젝트.",
+  caseTitle:"Z-Work카드 소재 큐레이션 판단",
+  caseStatus:"제외",
+  caseReason:"만화풍 일러스트 스타일이 현대카드 프리미엄 미학과 충돌. 직관적인 메시지 전달력은 있으나 브랜드 자산을 강화하지 못하는 방향으로 판단, 리드급 포트폴리오에서 제외 결정.",
+  designNote:"Z 모티프와 블루·그린 팔레트 자체는 유효했으나, 말풍선 레이아웃이 브랜드 위계를 흐림. 동일 혜택을 현대카드 비주얼 문법으로 재해석하는 방향을 대안으로 제시.",
+  principle:"전략적 사고가 드러나는 소재에 집중. 디자인이 단순 실행을 넘어 비즈니스 문제를 해결하는 방식을 보여주는 작업만 포함. 제네릭하거나 '안전한' 디자인은 제거하고, 브랜드 규범에서 벗어날 때는 높은 완성도와 명확한 전략적 근거를 함께 제시.",
+};
+
+let currentFilter="all";
+
+function scrollTo(id){
+  document.getElementById(id)&&document.getElementById(id).scrollIntoView({behavior:"smooth"});
+}
+
+// Particles
+(function(){
+  const c=document.getElementById("particles");
+  for(let i=0;i<35;i++){
+    const d=document.createElement("div");
+    const x=Math.random()*100,y=Math.random()*100,s=Math.random()*1.5+0.5,del=Math.random()*5,dur=Math.random()*4+3,op=Math.random()*0.3+0.05;
+    d.style.cssText=`position:absolute;left:${x}%;top:${y}%;width:${s}px;height:${s}px;border-radius:50%;background:rgba(196,177,240,${op});animation:floatP ${dur}s ${del}s ease-in-out infinite alternate`;
+    c.appendChild(d);
+  }
+})();
+
+// Scroll nav
+window.addEventListener("scroll",()=>{
+  const n=document.getElementById("main-nav");
+  const sy=window.scrollY;
+  if(sy>80){n.style.background="rgba(20,20,24,0.92)";n.style.backdropFilter="blur(20px)";n.style.borderBottom="1px solid rgba(196,177,240,0.06)"}
+  else{n.style.background="transparent";n.style.backdropFilter="none";n.style.borderBottom="none"}
+},{passive:true});
+
+// Filters
+function buildFilters(){
+  const wrap=document.getElementById("filters");
+  [{id:"all",l:"ALL"},{id:"handson",l:"HANDS-ON"},{id:"lead",l:"LEAD"},{id:"collab",l:"COLLAB"}].forEach(f=>{
+    const b=document.createElement("button");
+    b.className="filter-btn"+(f.id===currentFilter?" active":"");
+    b.textContent=f.l;
+    b.onclick=()=>{currentFilter=f.id;buildFilters();buildProjects()};
+    wrap.appendChild(b);
+  });
+}
+
+// Project cards
+function buildProjects(){
+  const g=document.getElementById("proj-grid");
+  g.innerHTML="";
+  const list=currentFilter==="all"?PROJECTS:PROJECTS.filter(p=>p.role===currentFilter);
+  const angles=[145,170,155,180,135,160,150,175,140];
+  list.forEach((p,i)=>{
+    const r=RM[p.role];
+    const d=document.createElement("div");
+    d.className="card";
+    d.style.cssText=`aspect-ratio:4/3;background:linear-gradient(${angles[i%9]}deg,#1c1c24 0%,#222230 40%,#2a2535 100%);border:1px solid rgba(255,255,255,0.04);animation:revealC 0.5s ${i*0.06}s ease-out both`;
+    d.innerHTML=`
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);font-family:'Playfair Display',serif;font-size:100px;font-weight:300;color:rgba(196,177,240,0.04);line-height:1;user-select:none">${p.brand.charAt(0)}</div>
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:22px 20px;z-index:1">
+        <div style="display:flex;gap:7px;margin-bottom:10px;align-items:center;flex-wrap:wrap">
+          <span class="dm" style="font-size:9px;font-weight:700;letter-spacing:0.14em;padding:3px 10px;border-radius:3px;background:${r.bg};color:${r.fg}">${r.l}</span>
+          ${p.ai?`<span class="dm ai-badge">AI</span>`:""}
+          <span class="dm" style="font-size:10px;color:rgba(255,255,255,0.25)">${p.period}</span>
+        </div>
+        <h3 class="pf" style="font-size:22px;font-weight:400;color:rgba(255,255,255,0.88);letter-spacing:0.01em;line-height:1.2;margin-bottom:4px">${p.brand}</h3>
+        <p class="noto" style="font-size:11px;color:rgba(255,255,255,0.3);line-height:1.5;font-weight:300">${p.tag}</p>
+        ${p.stats.length>0?`<div style="display:flex;gap:14px;margin-top:8px">${p.stats.slice(0,3).map(s=>`<div style="display:flex;align-items:baseline;gap:4px"><span class="pf" style="font-size:15px;font-weight:400;color:rgba(196,177,240,0.8)">${s.v}</span><span class="dm" style="font-size:9px;color:rgba(255,255,255,0.2)">${s.l}</span></div>`).join("")}</div>`:""}
+      </div>`;
+    d.addEventListener("mouseenter",()=>{d.style.transform="translateY(-4px) scale(1.01)";d.style.boxShadow="0 16px 48px rgba(196,177,240,0.08)";d.style.borderColor="rgba(196,177,240,0.2)"});
+    d.addEventListener("mouseleave",()=>{d.style.transform="";d.style.boxShadow="";d.style.borderColor="rgba(255,255,255,0.04)"});
+    d.onclick=()=>openProjectModal(p);
+    g.appendChild(d);
+  });
+}
+
+// Workflow pipeline
+function buildWF(){
+  const w=document.getElementById("wf-pipeline");
+  WF.forEach((wf,i)=>{
+    const box=document.createElement("div");
+    box.style.cssText="padding:10px 16px;border-radius:5px;background:rgba(255,255,255,0.02);border:1px solid rgba(196,177,240,0.06)";
+    box.innerHTML=`<div class="dm" style="font-size:8px;font-weight:700;letter-spacing:0.1em;color:rgba(196,177,240,0.3);margin-bottom:3px">${wf.step}</div><div class="dm" style="font-size:12px;font-weight:600;color:rgba(196,177,240,${0.9-i*0.12});white-space:nowrap">${wf.tool}</div><div class="noto" style="font-size:10px;color:rgba(255,255,255,0.2);font-weight:300;margin-top:2px;white-space:nowrap">${wf.detail}</div>`;
+    w.appendChild(box);
+    if(i<WF.length-1){const arrow=document.createElement("div");arrow.style.cssText="width:18px;height:1px;background:rgba(196,177,240,0.12);flex-shrink:0";w.appendChild(arrow);}
+  });
+}
+
+// Scene cards
+function buildScenes(){
+  [1,2,3].forEach(act=>{
+    const g=document.getElementById(`act${act}-grid`);
+    const actC={1:"rgba(196,177,240,0.7)",2:"rgba(180,160,240,0.55)",3:"rgba(160,140,230,0.45)"};
+    SCENES.filter(s=>s.act===act).forEach((sc,i)=>{
+      const d=document.createElement("div");
+      d.className="scene-card";
+      d.style.animation=`revealC 0.5s ${i*0.06}s ease-out both`;
+      d.innerHTML=`
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(196,177,240,0.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(120,100,200,0.06) 0%,transparent 50%)"></div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><span class="pf" style="font-size:56px;font-weight:300;color:rgba(196,177,240,0.04)">${String(sc.id).padStart(2,"0")}</span></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(14,12,22,0.95) 0%,rgba(14,12,22,0.3) 50%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:18px 16px;z-index:1">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+            <span class="dm" style="font-size:9px;letter-spacing:0.15em;font-weight:600;color:${actC[act]}">ACT ${act}</span>
+            <span class="dm" style="font-size:9px;letter-spacing:0.1em;color:rgba(255,255,255,0.2)">${sc.scene}</span>
+          </div>
+          <h4 class="pf" style="font-size:15px;font-weight:400;color:rgba(255,255,255,0.85);margin-bottom:5px;line-height:1.3;font-style:italic">${sc.title}</h4>
+          <p class="noto" style="font-size:10px;color:rgba(255,255,255,0.3);line-height:1.6;font-weight:300">${sc.desc}</p>
+        </div>`;
+      d.onclick=()=>openSceneModal(sc);
+      g.appendChild(d);
+    });
+  });
+}
+
+// Project modal
+function openProjectModal(p){
+  const r=RM[p.role];
+  document.getElementById("modal-hdr").innerHTML=`
+    <div>
+      <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap">
+        <span class="tag-badge" style="background:${r.bg};color:${r.fg}">${r.l}</span>
+        ${p.ai?`<span class="ai-badge">AI</span>`:""}
+        <span class="dm" style="font-size:11px;color:rgba(255,255,255,0.2)">${p.period}</span>
+      </div>
+      <h2 class="pf" style="font-size:clamp(24px,4vw,40px);font-weight:300;color:rgba(255,255,255,0.9);letter-spacing:0.02em;line-height:1.1;margin-bottom:6px">${p.brand}</h2>
+      <p class="noto" style="font-size:13px;color:rgba(255,255,255,0.28);font-weight:300">${p.tag}</p>
+    </div>
+    <button class="close-btn" onclick="closeProjectModal()">×</button>`;
+
+  let body=``;
+  if(p.stats.length>0){
+    body+=`<div style="display:flex;gap:40px;padding:18px 0;margin-bottom:32px;border-top:1px solid rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.04)">
+      ${p.stats.map(s=>`<div><div class="pf" style="font-size:26px;font-weight:300;color:rgba(196,177,240,0.8)">${s.v}</div><div class="dm" style="font-size:9px;color:rgba(255,255,255,0.2);font-weight:500;letter-spacing:0.12em;margin-top:4px">${s.l}</div></div>`).join("")}
+    </div>`;
+  }
+  body+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-bottom:36px">
+    <div><p class="dm" style="font-size:10px;letter-spacing:0.2em;color:rgba(196,177,240,0.5);font-weight:600;margin-bottom:12px">OVERVIEW</p><p class="noto" style="font-size:14px;line-height:1.9;color:rgba(255,255,255,0.48);font-weight:300">${p.desc}</p></div>
+    <div><p class="dm" style="font-size:10px;letter-spacing:0.2em;color:rgba(196,177,240,0.5);font-weight:600;margin-bottom:12px">PROCESS</p><p class="noto" style="font-size:13px;line-height:2;color:rgba(255,255,255,0.35);font-weight:300">${p.proc}</p></div>
+  </div>`;
+
+  if(p.id==="hyundai"){
+    body+=`
+    <div style="margin-bottom:32px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+        <p class="dm" style="font-size:10px;letter-spacing:0.2em;color:rgba(196,177,240,0.5);font-weight:600">CREATIVE DIRECTION</p>
+        <div style="flex-grow:1;height:1px;background:rgba(255,255,255,0.04)"></div>
+      </div>
+      <div style="padding:22px 26px;border-radius:8px;margin-bottom:14px;background:rgba(196,177,240,0.03);border:1px solid rgba(196,177,240,0.08)">
+        <p class="dm" style="font-size:9px;letter-spacing:0.18em;font-weight:600;color:rgba(196,177,240,0.4);margin-bottom:10px">STRATEGY OVERVIEW</p>
+        <p class="noto" style="font-size:13px;line-height:1.9;color:rgba(255,255,255,0.4);font-weight:300">${HYUNDAI.strategy}</p>
+      </div>
+      <div style="padding:22px 26px;border-radius:8px;margin-bottom:14px;background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.05)">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+          <p class="dm" style="font-size:9px;letter-spacing:0.18em;font-weight:600;color:rgba(196,177,240,0.4)">CURATION CASE</p>
+          <span class="dm" style="padding:2px 10px;border-radius:3px;font-size:9px;font-weight:700;letter-spacing:0.1em;background:rgba(255,100,100,0.1);color:rgba(255,140,140,0.65);border:1px solid rgba(255,100,100,0.12)">${HYUNDAI.caseStatus}</span>
+        </div>
+        <p class="pf" style="font-size:15px;font-weight:400;color:rgba(255,255,255,0.62);margin-bottom:10px;font-style:italic">${HYUNDAI.caseTitle}</p>
+        <p class="noto" style="font-size:13px;line-height:1.85;color:rgba(255,255,255,0.35);font-weight:300;margin-bottom:14px">${HYUNDAI.caseReason}</p>
+        <div style="padding-top:14px;border-top:1px solid rgba(255,255,255,0.04)">
+          <p class="dm" style="font-size:9px;letter-spacing:0.15em;font-weight:600;color:rgba(196,177,240,0.3);margin-bottom:8px">DESIGN NOTE</p>
+          <p class="noto" style="font-size:12px;line-height:1.8;color:rgba(255,255,255,0.25);font-weight:300">${HYUNDAI.designNote}</p>
+        </div>
+      </div>
+      <div style="padding:18px 26px;border-radius:8px;background:linear-gradient(135deg,rgba(196,177,240,0.04) 0%,rgba(196,177,240,0.01) 100%);border:1px solid rgba(196,177,240,0.07)">
+        <p class="dm" style="font-size:9px;letter-spacing:0.18em;font-weight:600;color:rgba(196,177,240,0.4);margin-bottom:10px">PORTFOLIO PRINCIPLE</p>
+        <p class="noto" style="font-size:13px;line-height:1.85;color:rgba(255,255,255,0.35);font-weight:300;font-style:italic">${HYUNDAI.principle}</p>
+      </div>
+    </div>`;
+  }
+
+  body+=`<div style="border-radius:8px;padding:56px 32px;text-align:center;border:1px dashed rgba(196,177,240,0.1);background:rgba(196,177,240,0.015)">
+    <p class="dm" style="font-size:13px;color:rgba(196,177,240,0.2);letter-spacing:0.12em;margin-bottom:8px">VISUAL ASSETS</p>
+    <p class="noto" style="font-size:11px;color:rgba(255,255,255,0.12);font-weight:300">소재 이미지 추가 예정</p>
+  </div>`;
+
+  document.getElementById("modal-body").innerHTML=body;
+  const w=document.getElementById("modal-wrap");
+  w.style.display="flex";
+  w.style.animation="fadeInM 0.2s ease-out";
+}
+function closeProjectModal(){document.getElementById("modal-wrap").style.display="none"}
+
+// Scene modal
+function openSceneModal(sc){
+  const actC={1:"rgba(196,177,240,0.9)",2:"rgba(180,160,240,0.7)",3:"rgba(160,140,230,0.55)"};
+  document.getElementById("scene-hdr").innerHTML=`
+    <div style="display:flex;align-items:center;gap:16px">
+      <span class="dm" style="font-size:9px;letter-spacing:0.2em;font-weight:600;color:${actC[sc.act]}">ACT ${sc.act}</span>
+      <span style="color:rgba(255,255,255,0.1)">·</span>
+      <span class="dm" style="font-size:9px;letter-spacing:0.1em;color:rgba(255,255,255,0.2)">${sc.scene}</span>
+    </div>
+    <button class="close-btn" onclick="closeSceneModal()">×</button>`;
+  document.getElementById("scene-img").innerHTML=`<div style="text-align:center"><div class="pf" style="font-size:64px;font-weight:300;color:rgba(196,177,240,0.06);margin-bottom:12px">${String(sc.id).padStart(2,"0")}</div><p class="dm" style="font-size:10px;color:rgba(196,177,240,0.18);letter-spacing:0.15em">이미지 준비 중</p></div>`;
+  document.getElementById("scene-info").innerHTML=`
+    <h2 class="pf" style="font-size:28px;font-weight:300;color:rgba(255,255,255,0.88);font-style:italic;letter-spacing:0.02em;line-height:1.2;margin-bottom:8px">${sc.title}</h2>
+    <p class="noto" style="font-size:13px;color:rgba(255,255,255,0.3);line-height:1.8;font-weight:300;margin-bottom:28px">${sc.desc}</p>
+    <div style="border-top:1px solid rgba(255,255,255,0.05);padding-top:22px">
+      <p class="dm" style="font-size:9px;letter-spacing:0.18em;color:rgba(196,177,240,0.4);font-weight:600;margin-bottom:14px">AI WORKFLOW</p>
+      ${WF.map((w,i)=>`<div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:11px"><span class="dm" style="font-size:9px;font-weight:600;color:rgba(196,177,240,0.2);letter-spacing:0.1em;padding-top:1px;flex-shrink:0">${w.step}</span><div><span class="dm" style="font-size:12px;font-weight:600;color:rgba(196,177,240,${0.9-i*0.12})">${w.tool}</span><span class="noto" style="font-size:11px;color:rgba(255,255,255,0.2);font-weight:300;margin-left:8px">${w.detail}</span></div></div>`).join("")}
+    </div>`;
+  const w=document.getElementById("scene-modal-wrap");
+  w.style.display="flex";
+}
+function closeSceneModal(){document.getElementById("scene-modal-wrap").style.display="none"}
+
+// Close on overlay click
+document.getElementById("modal-wrap").addEventListener("click",function(e){if(e.target===this)closeProjectModal()});
+document.getElementById("scene-modal-wrap").addEventListener("click",function(e){if(e.target===this)closeSceneModal()});
+
+buildFilters();
+buildProjects();
+buildWF();
+buildScenes();
+</script>
