@@ -188,16 +188,18 @@ function UniversalModal({isOpen, onClose, title, subtitle, badges, desc, proc, s
       {/* Scroll Body */}
       <div style={{position:"relative",zIndex:1,flexGrow:1,overflowY:"auto",display:"flex",flexDirection:"column"}}>
         
-        {/* 메인 이미지 - 원본 비율 유지 */}
+        {/* 메인 이미지 - 세로 긴 소재도 스크롤로 전체 확인 가능 */}
         <div style={{
-          width:"100%",maxHeight:"55vh",background:"#040306",position:"relative",
-          display:"flex",alignItems:"center",justifyContent:"center",borderBottom:"1px solid rgba(196,177,240,0.18)",
-          overflow:"hidden"
+          width:"100%",maxHeight:"60vh",background:"#040306",position:"relative",
+          borderBottom:"1px solid rgba(196,177,240,0.18)",
+          overflowY:"auto",overflowX:"hidden",
+          display:"flex",alignItems:"flex-start",justifyContent:"center",
         }}>
           {mainImg && !imgErr ? (
-            <img src={mainImg} alt={title} onError={()=>setImgErr(true)} style={{width:"100%",height:"100%",objectFit:"contain",maxHeight:"55vh"}}/>
+            <img src={mainImg} alt={title} onError={()=>setImgErr(true)}
+              style={{width:"auto",maxWidth:"100%",height:"auto",display:"block"}}/>
           ) : (
-            <div style={{textAlign:"center",padding:"48px 20px"}}>
+            <div style={{textAlign:"center",padding:"48px 20px",width:"100%"}}>
               <p style={{fontSize:11,color:"rgba(196,177,240,0.6)",fontFamily:"'DM Sans',sans-serif",letterSpacing:"0.22em",fontWeight:700}}>VISUAL ASSETS</p>
               <p style={{fontSize:12,color:"rgba(255,255,255,0.35)",fontWeight:300,marginTop:6}}>소재 이미지 준비 중</p>
             </div>
