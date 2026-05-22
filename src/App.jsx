@@ -158,108 +158,124 @@ function SceneCard({scene, onClick}) {
 
 // ─── HIGH VISIBILITY SINGLE-COLUMN MOOD MODAL (V4 INTEGRATED) ─────────────────
 function UniversalModal({isOpen, onClose, title, subtitle, badges, desc, proc, stats, imgUrl, imgs, children}) {
-  const [imgErr, setImgErr] = useState(false);
   const [activeImg, setActiveImg] = useState(0);
+  const [lightbox, setLightbox] = useState(false);
   const mainImg = imgs && imgs.length > 0 ? imgs[activeImg] : imgUrl;
 
   useEffect(() => {
-    if (isOpen) { document.body.style.overflow = "hidden"; setActiveImg(0); }
+    if (isOpen) { document.body.style.overflow = "hidden"; setActiveImg(0); setLightbox(false); }
     return () => { document.body.style.overflow = "" };
   }, [isOpen]);
 
   if (!isOpen) return null;
 
-  return <div onClick={onClose} style={{
-    position:"fixed",inset:0,zIndex:300,background:"rgba(5,4,10,0.96)",backdropFilter:"blur(20px)",
-    display:"flex",alignItems:"center",justifyContent:"center",animation:"fadeIn 0.2s ease-out",padding:"2vh 2vw"
-  }}>
-    <div onClick={e=>e.stopPropagation()} style={{
-      width:"94vw",height:"94vh",maxWidth:1000,borderRadius:16,overflow:"hidden",
-      border:"1px solid rgba(196,177,240,0.22)",display:"flex",flexDirection:"column",position:"relative",
-      boxShadow:"0 32px 80px rgba(0,0,0,0.8)",background:"#0a0714"
+  return <>
+    {/* 라이트박스 — 세로 긴 소재 전체 보기 */}
+    {lightbox && <div onClick={()=>setLightbox(false)} style={{
+      position:"fixed",inset:0,zIndex:500,background:"rgba(0,0,0,0.96)",
+      display:"flex",alignItems:"flex-start",justifyContent:"center",
+      overflowY:"auto",padding:"40px 20px",cursor:"zoom-out"
     }}>
-      {/* Header Close Button */}
-      <button onClick={onClose} style={{
-        position:"absolute",top:24,right:28,zIndex:10,background:"none",border:"1px solid rgba(255,255,255,0.2)",
-        color:"rgba(255,255,255,0.6)",width:36,height:36,borderRadius:8,cursor:"pointer",fontSize:18,
-        display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.2s"
-      }} onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(196,177,240,0.5)";e.currentTarget.style.color="#fff"}}>×</button>
+      <img src={mainImg} alt="" onClick={e=>e.stopPropagation()}
+        style={{maxWidth:"90vw",height:"auto",borderRadius:8,cursor:"default"}}/>
+      <button onClick={()=>setLightbox(false)} style={{
+        position:"fixed",top:20,right:28,background:"none",border:"1px solid rgba(255,255,255,0.2)",
+        color:"white",width:40,height:40,borderRadius:8,cursor:"pointer",fontSize:20,
+        display:"flex",alignItems:"center",justifyContent:"center"
+      }}>×</button>
+    </div>}
 
-      {/* Scroll Body */}
-      <div style={{position:"relative",zIndex:1,flexGrow:1,overflowY:"auto",display:"flex",flexDirection:"column"}}>
-        
-        {/* 메인 이미지 - 세로 긴 소재도 스크롤로 전체 확인 가능 */}
-        <div style={{
-          width:"100%",maxHeight:"60vh",background:"#040306",position:"relative",
-          borderBottom:"1px solid rgba(196,177,240,0.18)",
-          overflowY:"auto",overflowX:"hidden",
-          display:"flex",alignItems:"flex-start",justifyContent:"center",
-        }}>
-          {mainImg && !imgErr ? (
-            <img src={mainImg} alt={title} onError={()=>setImgErr(true)}
-              style={{width:"auto",maxWidth:"100%",height:"auto",display:"block"}}/>
-          ) : (
-            <div style={{textAlign:"center",padding:"48px 20px",width:"100%"}}>
-              <p style={{fontSize:11,color:"rgba(196,177,240,0.6)",fontFamily:"'DM Sans',sans-serif",letterSpacing:"0.22em",fontWeight:700}}>VISUAL ASSETS</p>
-              <p style={{fontSize:12,color:"rgba(255,255,255,0.35)",fontWeight:300,marginTop:6}}>소재 이미지 준비 중</p>
-            </div>
-          )}
-        </div>
+    <div onClick={onClose} style={{
+      position:"fixed",inset:0,zIndex:300,background:"rgba(5,4,10,0.96)",backdropFilter:"blur(20px)",
+      display:"flex",alignItems:"center",justifyContent:"center",animation:"fadeIn 0.2s ease-out",padding:"2vh 2vw"
+    }}>
+      <div onClick={e=>e.stopPropagation()} style={{
+        width:"94vw",height:"94vh",maxWidth:1100,borderRadius:16,overflow:"hidden",
+        border:"1px solid rgba(196,177,240,0.22)",display:"flex",flexDirection:"column",position:"relative",
+        boxShadow:"0 32px 80px rgba(0,0,0,0.8)",background:"#0a0714"
+      }}>
+        {/* Close */}
+        <button onClick={onClose} style={{
+          position:"absolute",top:20,right:24,zIndex:10,background:"rgba(0,0,0,0.5)",
+          border:"1px solid rgba(255,255,255,0.2)",color:"rgba(255,255,255,0.7)",
+          width:36,height:36,borderRadius:8,cursor:"pointer",fontSize:18,
+          display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.2s"
+        }} onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(196,177,240,0.5)";e.currentTarget.style.color="#fff"}}
+           onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(255,255,255,0.2)";e.currentTarget.style.color="rgba(255,255,255,0.7)"}}>×</button>
 
-        {/* 썸네일 갤러리 */}
-        {imgs && imgs.length > 1 && (
-          <div style={{display:"flex",gap:6,padding:"12px 20px",overflowX:"auto",background:"rgba(0,0,0,0.4)",borderBottom:"1px solid rgba(196,177,240,0.08)",flexShrink:0}}>
-            {imgs.map((img,i)=>(
-              <div key={i} onClick={()=>{setActiveImg(i);setImgErr(false)}} style={{
-                width:64,height:48,flexShrink:0,borderRadius:4,overflow:"hidden",cursor:"pointer",
-                border:`2px solid ${activeImg===i?"rgba(196,177,240,0.8)":"rgba(255,255,255,0.1)"}`,
-                transition:"all 0.2s",opacity:activeImg===i?1:0.5,
-              }}>
-                <img src={img} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}
-                  onError={e=>{e.target.parentElement.style.display="none"}}/>
+        {/* Scroll Body */}
+        <div style={{flexGrow:1,overflowY:"auto",display:"flex",flexDirection:"column"}}>
+
+          {/* ① 풀와이드 히어로 이미지 — cover로 꽉 채움 */}
+          <div style={{
+            width:"100%",height:"52vh",flexShrink:0,background:"#040306",position:"relative",
+            borderBottom:"1px solid rgba(196,177,240,0.12)",overflow:"hidden",cursor:"zoom-in"
+          }} onClick={()=>mainImg&&setLightbox(true)}>
+            {mainImg ? (
+              <img src={mainImg} alt={title}
+                style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"top"}}/>
+            ) : (
+              <div style={{display:"flex",alignItems:"center",justifyContent:"center",height:"100%",flexDirection:"column",gap:8}}>
+                <p style={{fontSize:11,color:"rgba(196,177,240,0.4)",fontFamily:"'DM Sans',sans-serif",letterSpacing:"0.22em",fontWeight:700}}>VISUAL ASSETS</p>
+                <p style={{fontSize:12,color:"rgba(255,255,255,0.2)",fontWeight:300}}>소재 이미지 준비 중</p>
               </div>
-            ))}
-          </div>
-        )}
-
-        {/* 하단 정보 레이아웃 */}
-        <div style={{padding:"36px 48px 60px",maxWidth:820,margin:"0 auto",width:"100%"}}>
-          <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:16,flexWrap:"wrap"}}>
-            {badges}
+            )}
+            {/* 하단 그라디언트 */}
+            <div style={{position:"absolute",bottom:0,left:0,right:0,height:80,background:"linear-gradient(to bottom,transparent,rgba(10,7,20,0.7))",pointerEvents:"none"}}/>
+            {/* 전체보기 힌트 */}
+            {mainImg && <div style={{position:"absolute",bottom:14,right:16,fontSize:10,fontFamily:"'DM Sans',sans-serif",letterSpacing:"0.12em",color:"rgba(255,255,255,0.35)",pointerEvents:"none"}}>클릭하여 전체 보기 ↗</div>}
           </div>
 
-          <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:36,fontWeight:400,color:"#ffffff",lineHeight:1.2,marginBottom:6}}>{title}</h2>
-          <p style={{fontSize:14,color:"rgba(196,177,240,0.8)",fontWeight:400,fontFamily:"'Noto Sans KR',sans-serif",marginBottom:32}}>{subtitle}</p>
-
-          {/* 주요 수치 지표 (Stats) */}
-          {stats && stats.length > 0 && (
-            <div style={{display:"flex",gap:48,padding:"20px 0",marginBottom:32,borderTop:"1px solid rgba(255,255,255,0.08)",borderBottom:"1px solid rgba(255,255,255,0.08)"}}>
-              {stats.map((s,i)=><div key={i}>
-                <div style={{fontFamily:"'Playfair Display',serif",fontSize:30,fontWeight:400,color:"#c4b1f0"}}>{s.v}</div>
-                <div style={{fontSize:10,color:"rgba(255,255,255,0.4)",fontFamily:"'DM Sans',sans-serif",letterSpacing:"0.1em",marginTop:2}}>{s.l}</div>
-              </div>)}
+          {/* ② 썸네일 가로 스크롤 */}
+          {imgs && imgs.length > 1 && (
+            <div style={{display:"flex",gap:6,padding:"10px 16px",overflowX:"auto",background:"rgba(0,0,0,0.5)",borderBottom:"1px solid rgba(196,177,240,0.07)",flexShrink:0,
+              scrollbarWidth:"none"}}>
+              {imgs.map((img,i)=>(
+                <div key={i} onClick={()=>{setActiveImg(i);}} style={{
+                  width:72,height:52,flexShrink:0,borderRadius:4,overflow:"hidden",cursor:"pointer",
+                  border:`2px solid ${activeImg===i?"rgba(196,177,240,0.9)":"rgba(255,255,255,0.08)"}`,
+                  transition:"all 0.2s",opacity:activeImg===i?1:0.45,
+                }}>
+                  <img src={img} alt="" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"top"}}
+                    onError={e=>{e.target.parentElement.style.display="none"}}/>
+                </div>
+              ))}
             </div>
           )}
 
-          {/* 상세 디스크립션 플로우 */}
-          <div style={{display:"flex",flexDirection:"column",gap:36,marginTop:12}}>
-            <div>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,letterSpacing:"0.15em",color:"rgba(196,177,240,0.8)",fontWeight:700,marginBottom:10}}>OVERVIEW</p>
-              <p style={{fontSize:15,lineHeight:2.0,color:"rgba(255,255,255,0.85)",fontWeight:300}}>{desc}</p>
+          {/* ③ 텍스트 정보 */}
+          <div style={{padding:"32px 48px 60px",maxWidth:860,margin:"0 auto",width:"100%"}}>
+            <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:14,flexWrap:"wrap"}}>
+              {badges}
             </div>
+            <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:34,fontWeight:400,color:"#fff",lineHeight:1.2,marginBottom:6}}>{title}</h2>
+            <p style={{fontSize:14,color:"rgba(196,177,240,0.8)",fontWeight:400,fontFamily:"'Noto Sans KR',sans-serif",marginBottom:28}}>{subtitle}</p>
 
-            <div>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,letterSpacing:"0.15em",color:"rgba(196,177,240,0.8)",fontWeight:700,marginBottom:10}}>PROCESS FLOW</p>
-              <p style={{fontSize:14,lineHeight:1.85,color:"rgba(255,255,255,0.6)",fontWeight:300}}>{proc}</p>
+            {stats && stats.length > 0 && (
+              <div style={{display:"flex",gap:48,padding:"18px 0",marginBottom:28,borderTop:"1px solid rgba(255,255,255,0.07)",borderBottom:"1px solid rgba(255,255,255,0.07)"}}>
+                {stats.map((s,i)=><div key={i}>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:28,fontWeight:400,color:"#c4b1f0"}}>{s.v}</div>
+                  <div style={{fontSize:10,color:"rgba(255,255,255,0.35)",fontFamily:"'DM Sans',sans-serif",letterSpacing:"0.1em",marginTop:2}}>{s.l}</div>
+                </div>)}
+              </div>
+            )}
+
+            <div style={{display:"flex",flexDirection:"column",gap:32,marginTop:8}}>
+              <div>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,letterSpacing:"0.15em",color:"rgba(196,177,240,0.7)",fontWeight:700,marginBottom:10}}>OVERVIEW</p>
+                <p style={{fontSize:15,lineHeight:2.0,color:"rgba(255,255,255,0.8)",fontWeight:300}}>{desc}</p>
+              </div>
+              <div>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,letterSpacing:"0.15em",color:"rgba(196,177,240,0.7)",fontWeight:700,marginBottom:10}}>PROCESS FLOW</p>
+                <p style={{fontSize:14,lineHeight:1.85,color:"rgba(255,255,255,0.5)",fontWeight:300}}>{proc}</p>
+              </div>
+              {children}
             </div>
-
-            {children}
           </div>
         </div>
-
       </div>
     </div>
-  </div>;
+  </>;
 }
 
 // ─── MAIN APP ─────────────────────────────────────────────────────────────────
