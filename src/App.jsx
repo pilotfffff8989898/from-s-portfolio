@@ -5,44 +5,58 @@ const P = [
   { id:"hyundai", brand:"현대카드", period:"2024", role:"lead", ai:true,
     tag:"프리미엄 금융 브랜드의 디지털 크리에이티브 총괄",
     stats:[{l:"연간 소재",v:"1,228"},{l:"CTR",v:"2×"},{l:"노출",v:"20억+"}],
-    desc:"현대카드 전 카드 라인업의 디지털 광고 크리에이티브를 총괄 리딩. brand 일관성을 유지하면서 카드별 차별화된 비주얼 전략을 수립하고, 하반기 CTR 2배 개선을 달성.",
-    proc:"크리에이티브 방향성 수립 → 기획팀 커뮤니케이션 → 팀 내 업무 분배 → 시안 리뷰 → 성과 모니터링" },
+    desc:"현대카드 전 카드 라인업의 디지털 광고 크리에이티브를 총괄 리딩. 브랜드 일관성을 유지하면서 카드별 차별화된 비주얼 전략을 수립하고, 하반기 CTR 2배 개선을 달성.",
+    proc:"크리에이티브 방향성 수립 → 기획팀 커뮤니케이션 → 팀 내 업무 분배 → 시안 리뷰 → 성과 모니터링",
+    imgs:["/portfolio_images/hyundai_main.jpg","/portfolio_images/hyundai_02.jpg","/portfolio_images/hyundai_03.jpg","/portfolio_images/hyundai_04.jpg","/portfolio_images/hyundai_05.jpg","/portfolio_images/hyundai_06.jpg","/portfolio_images/hyundai_07.jpg","/portfolio_images/hyundai_08.jpg","/portfolio_images/hyundai_09.jpg","/portfolio_images/hyundai_10.jpg"] },
   { id:"coupang", brand:"쿠팡풀필먼트", period:"2024–25", role:"handson", ai:true,
     tag:"데일리 카카오 플친 소재 대량 제작",
     stats:[{l:"발송",v:"Daily"},{l:"총 소재",v:"6,900+"}],
     desc:"카카오 플러스친구 채널의 데일리 프로모션 소재를 직접 기획·제작·운영. 대량 제작 환경에서 일관된 퀄리티와 효율적 워크플로우 구축.",
-    proc:"프로모션 캘린더 → 소재 기획 → 디자인 제작 → 검수 → 발송" },
+    proc:"프로모션 캘린더 → 소재 기획 → 디자인 제작 → 검수 → 발송",
+    imgs:["/portfolio_images/coupang_main.jpg","/portfolio_images/coupang_02.jpg","/portfolio_images/coupang_03.jpg","/portfolio_images/coupang_04.jpg","/portfolio_images/coupang_05.jpg","/portfolio_images/coupang_06.jpg","/portfolio_images/coupang_07.jpg","/portfolio_images/coupang_08.jpg","/portfolio_images/coupang_09.jpg","/portfolio_images/coupang_10.jpg","/portfolio_images/coupang_11.jpg"] },
   { id:"spirit", brand:"스피릿테일즈", period:"2024", role:"lead", ai:true,
     tag:"게임 런칭 DA 캠페인 크리에이티브 리드",
     stats:[{l:"포맷",v:"DA/BSA/KV"}],
     desc:"스피릿테일즈 게임 런칭 및 시즌별 업데이트 캠페인의 크리에이티브 방향성 수립 및 팀 리딩.",
-    proc:"IP 분석 → 타깃 설정 → 컨셉 수립 → 시안 리딩 → 매체 최적화" },
+    proc:"IP 분석 → 타깃 설정 → 컨셉 수립 → 시안 리딩 → 매체 최적화",
+    imgs:["/portfolio_images/spirit_main.jpg","/portfolio_images/spirit_02.jpg","/portfolio_images/spirit_03.jpg","/portfolio_images/spirit_04.jpg","/portfolio_images/spirit_05.jpg","/portfolio_images/spirit_06.jpg","/portfolio_images/spirit_07.jpg"] },
   { id:"ali", brand:"알리익스프레스", period:"2024", role:"collab", ai:true,
     tag:"글로벌 이커머스 DA 캠페인",
     stats:[{l:"캠페인",v:"BSA/타임딜"}],
     desc:"알리익스프레스의 다양한 프로모션 DA 소재 기획 및 제작 협업.",
-    proc:"글로벌 가이드 → 로컬라이제이션 → 소재 제작 → 매체 협업" },
+    proc:"글로벌 가이드 → 로컬라이제이션 → 소재 제작 → 매체 협업",
+    imgs:["/portfolio_images/ali_main.jpg","/portfolio_images/ali_01.jpg","/portfolio_images/ali_02.jpg","/portfolio_images/ali_03.jpg","/portfolio_images/ali_04.jpg","/portfolio_images/ali_05.jpg","/portfolio_images/ali_06.jpg","/portfolio_images/ali_07.jpg","/portfolio_images/ali_08.jpg","/portfolio_images/ali_09.jpg","/portfolio_images/ali_10.jpg","/portfolio_images/ali_11.jpg"] },
   { id:"jobkorea", brand:"잡코리아", period:"2024", role:"handson", ai:false,
     tag:"채용 플랫폼 디지털 크리에이티브", stats:[],
     desc:"잡코리아 신학기 캠페인, 이상형월드컵 등 프로모션 DA 소재 직접 제작.",
-    proc:"브리프 분석 → 컨셉 도출 → 디자인 → 리뷰 → 최종 산출" },
+    proc:"브리프 분석 → 컨셉 도출 → 디자인 → 리뷰 → 최종 산출",
+    imgs:[] },
   { id:"daesang", brand:"대상웰라이프", period:"2024", role:"collab", ai:true,
     tag:"건강기능식품 디지털 마케팅",
     stats:[{l:"제품",v:"15종"}],
     desc:"뉴케어, 마이밀, 올프로틴 등 15개 제품 라인의 DA 소재 및 이벤트 페이지 제작.",
-    proc:"USP 분석 → 메시지 설계 → 소재 제작 → A/B 테스트" },
+    proc:"USP 분석 → 메시지 설계 → 소재 제작 → A/B 테스트",
+    imgs:["/portfolio_images/dibambi_01.jpg","/portfolio_images/dibambi_02.jpg","/portfolio_images/dibambi_03.jpg","/portfolio_images/dibambi_04.jpg"] },
   { id:"woori", brand:"우리카드", period:"2025", role:"lead", ai:false,
     tag:"금융 브랜드 크리에이티브 운영", stats:[],
     desc:"우리카드 디지털 광고 크리에이티브 운영 및 리딩.",
-    proc:"브리프 → 방향성 → 팀 배분 → 리뷰 → 산출" },
+    proc:"브리프 → 방향성 → 팀 배분 → 리뷰 → 산출",
+    imgs:["/portfolio_images/woori_main.jpg","/portfolio_images/woori_02.jpg","/portfolio_images/woori_03.jpg","/portfolio_images/woori_04.jpg","/portfolio_images/woori_05.jpg","/portfolio_images/woori_06.jpg","/portfolio_images/woori_07.jpg","/portfolio_images/woori_08.jpg"] },
   { id:"netmarble", brand:"넷마블", period:"2024", role:"lead", ai:true,
     tag:"게임 퍼포먼스 DA", stats:[],
     desc:"넷마블 게임 타이틀 퍼포먼스 마케팅 DA 크리에이티브 리딩.",
-    proc:"타이틀 분석 → UA 전략 → 크리에이티브 리딩 → 최적화" },
+    proc:"타이틀 분석 → UA 전략 → 크리에이티브 리딩 → 최적화",
+    imgs:[] },
   { id:"linegames", brand:"라인게임즈", period:"2024", role:"lead", ai:false,
     tag:"게임 브랜드 DA 크리에이티브", stats:[],
     desc:"라인게임즈 게임 타이틀 디지털 광고 크리에이티브 리딩.",
-    proc:"IP 분석 → 세그먼트 → 전략 → 제작 관리 → QC" },
+    proc:"IP 분석 → 세그먼트 → 전략 → 제작 관리 → QC",
+    imgs:[] },
+  { id:"hanwha", brand:"한화", period:"2024", role:"collab", ai:false,
+    tag:"한화 그룹 디지털 광고 크리에이티브", stats:[],
+    desc:"한화 그룹 계열사 디지털 광고 소재 기획 및 제작 협업.",
+    proc:"브리프 분석 → 컨셉 도출 → 디자인 → 리뷰 → 산출",
+    imgs:["/portfolio_images/hanwha_main.jpg","/portfolio_images/hanwha_02.jpg","/portfolio_images/hanwha_03.jpg","/portfolio_images/hanwha_04.jpg","/portfolio_images/hanwha_05.jpg","/portfolio_images/hanwha_06.jpg","/portfolio_images/hanwha_07.jpg","/portfolio_images/hanwha_08.jpg"] },
 ];
 
 // ─── 21년의 밤 — AI 프로젝트 데이터 ──────────────────────────────────────────
@@ -146,10 +160,13 @@ function SceneCard({scene, onClick}) {
 }
 
 // ─── HIGH VISIBILITY SINGLE-COLUMN MOOD MODAL (V4 INTEGRATED) ─────────────────
-function UniversalModal({isOpen, onClose, title, subtitle, badges, desc, proc, stats, imgUrl, children}) {
+function UniversalModal({isOpen, onClose, title, subtitle, badges, desc, proc, stats, imgUrl, imgs, children}) {
   const [imgErr, setImgErr] = useState(false);
+  const [activeImg, setActiveImg] = useState(0);
+  const mainImg = imgs && imgs.length > 0 ? imgs[activeImg] : imgUrl;
+
   useEffect(() => {
-    if (isOpen) document.body.style.overflow = "hidden";
+    if (isOpen) { document.body.style.overflow = "hidden"; setActiveImg(0); }
     return () => { document.body.style.overflow = "" };
   }, [isOpen]);
 
@@ -162,14 +179,8 @@ function UniversalModal({isOpen, onClose, title, subtitle, badges, desc, proc, s
     <div onClick={e=>e.stopPropagation()} style={{
       width:"94vw",height:"94vh",maxWidth:1000,borderRadius:16,overflow:"hidden",
       border:"1px solid rgba(196,177,240,0.22)",display:"flex",flexDirection:"column",position:"relative",
-      boxShadow:"0 32px 80px rgba(0,0,0,0.8)",
-      /* --- [대안 2] 이미지를 배경에 깔고 50px 블러 처리하여 어두움 해결 --- */
-      backgroundImage: imgUrl && !imgErr ? `url(${imgUrl})` : "none",
-      backgroundSize: "cover",backgroundPosition: "center"
+      boxShadow:"0 32px 80px rgba(0,0,0,0.8)",background:"#0a0714"
     }}>
-      {/* 몽환적 블러 레이어 */}
-      <div style={{position:"absolute",inset:0,background:"rgba(14,11,25,0.91)",backdropFilter:"blur(50px)",zIndex:0}}/>
-
       {/* Header Close Button */}
       <button onClick={onClose} style={{
         position:"absolute",top:24,right:28,zIndex:10,background:"none",border:"1px solid rgba(255,255,255,0.2)",
@@ -180,25 +191,40 @@ function UniversalModal({isOpen, onClose, title, subtitle, badges, desc, proc, s
       {/* Scroll Body */}
       <div style={{position:"relative",zIndex:1,flexGrow:1,overflowY:"auto",display:"flex",flexDirection:"column"}}>
         
-        {/* [대안 1] 탑 배치 16:9 와이드 미디어 박스 (개방감 극대화) */}
+        {/* 메인 이미지 */}
         <div style={{
           width:"100%",aspectRatio:"16/9",maxHeight:"46vh",background:"#040306",position:"relative",
           display:"flex",alignItems:"center",justifyContent:"center",borderBottom:"1px solid rgba(196,177,240,0.18)"
         }}>
-          {imgUrl && !imgErr ? (
-            <img src={imgUrl} alt={title} onError={() => setImgErr(true)} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+          {mainImg && !imgErr ? (
+            <img src={mainImg} alt={title} onError={()=>setImgErr(true)} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
           ) : (
             <div style={{textAlign:"center",padding:20}}>
-              <p style={{fontSize:11,color:"rgba(196,177,240,0.6)",fontFamily:"'DM Sans',sans-serif",letterSpacing:"0.22em",fontWeight:700}}>CINEMATIC ASSET PRESENTATION</p>
-              <p style={{fontSize:12,color:"rgba(255,255,255,0.35)",fontWeight:300,marginTop:6}}>소재 시각 자산 매핑 대기 중</p>
+              <p style={{fontSize:11,color:"rgba(196,177,240,0.6)",fontFamily:"'DM Sans',sans-serif",letterSpacing:"0.22em",fontWeight:700}}>VISUAL ASSETS</p>
+              <p style={{fontSize:12,color:"rgba(255,255,255,0.35)",fontWeight:300,marginTop:6}}>소재 이미지 준비 중</p>
             </div>
           )}
-          <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom, transparent 60%, rgba(14,11,25,0.6) 100%)"}}/>
+          <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom, transparent 60%, rgba(14,11,25,0.6) 100%)",pointerEvents:"none"}}/>
         </div>
 
-        {/* 하단 한 통으로 터버린 싱글 컬럼 정보 레이아웃 */}
-        <div style={{padding:"40px 48px 60px",maxWidth:820,margin:"0 auto",width:"100%"}}>
-          {/* 배지 & 정보 헤더 */}
+        {/* 썸네일 갤러리 */}
+        {imgs && imgs.length > 1 && (
+          <div style={{display:"flex",gap:6,padding:"12px 20px",overflowX:"auto",background:"rgba(0,0,0,0.4)",borderBottom:"1px solid rgba(196,177,240,0.08)",flexShrink:0}}>
+            {imgs.map((img,i)=>(
+              <div key={i} onClick={()=>{setActiveImg(i);setImgErr(false)}} style={{
+                width:64,height:48,flexShrink:0,borderRadius:4,overflow:"hidden",cursor:"pointer",
+                border:`2px solid ${activeImg===i?"rgba(196,177,240,0.8)":"rgba(255,255,255,0.1)"}`,
+                transition:"all 0.2s",opacity:activeImg===i?1:0.5,
+              }}>
+                <img src={img} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}
+                  onError={e=>{e.target.parentElement.style.display="none"}}/>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* 하단 정보 레이아웃 */}
+        <div style={{padding:"36px 48px 60px",maxWidth:820,margin:"0 auto",width:"100%"}}>
           <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:16,flexWrap:"wrap"}}>
             {badges}
           </div>
@@ -397,7 +423,7 @@ export default function App() {
       {/* UNIVERSAL MODAL ─ BRAND WORK LAYER */}
       {sel && (
         <UniversalModal 
-          isOpen={!!sel} onClose={()=>setSel(null)} title={sel.brand} subtitle={sel.tag} stats={sel.stats} desc={sel.desc} proc={sel.proc}
+          isOpen={!!sel} onClose={()=>setSel(null)} title={sel.brand} subtitle={sel.tag} stats={sel.stats} desc={sel.desc} proc={sel.proc} imgs={sel.imgs||[]}
           badges={<>
             <span style={{fontSize:10,fontWeight:700,fontFamily:"'DM Sans',sans-serif",padding:"4px 12px",borderRadius:3,background:RM[sel.role].bg,color:RM[sel.role].fg}}>{RM[sel.role].l}</span>
             {sel.ai&&<span style={{fontSize:10,fontWeight:600,padding:"4px 10px",borderRadius:3,background:"rgba(196,177,240,0.2)",color:"#c4b1f0"}}>AI</span>}
